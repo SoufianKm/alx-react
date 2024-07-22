@@ -9,15 +9,22 @@ module.exports = {
     header: './modules/header/header.js',
     body: './modules/body/body.js',
     footer: './modules/footer/footer.js',
-  }
+  },
   performance: {
     maxAssetSize: 1000000,
+    hints: false,
+    maxEntrypointSize: 1000000,
   },
   plugins: [ new CleanWebpackPlugin(), new HtmlWebpackPlugin() ],
   optimization: {
     splitChunks: {
       chunks: 'all',
     },
+  },
+  devServer: {
+    contentBase: path.join(__dirname, './public'),
+    compress: true,
+    port: 8564,
   },
   output: {
     filename: '[name].bundle.js',
@@ -43,12 +50,5 @@ module.exports = {
         ],
       },
     ],
-  },
-  devServer: {
-    static: {
-      directory: path.join(__dirname, 'public'),
-    },
-    compress: true,
-    port: 8564,
   },
 };
