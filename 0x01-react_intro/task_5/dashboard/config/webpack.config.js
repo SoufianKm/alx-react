@@ -8,7 +8,13 @@ module.exports = {
   entry: "./src/index.js",
   output: {
     filename: "bundle.js",
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve("./dist"),
+  },
+  devServer: {
+    hot: true,
+    contentBase: path.resolve("./dist"),
+    compress: true,
+    port: 8564,
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -18,6 +24,10 @@ module.exports = {
     }),
   ],
   devtool: "inline-source-map",
+  performance: {
+    maxAssetSize: 1000000,
+    maxEntrypointSize: 1000000,
+  },
   module: {
     rules: [
       {
