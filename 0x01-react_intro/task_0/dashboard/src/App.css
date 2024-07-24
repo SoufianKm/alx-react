@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 /*****************************************/
 /*  HEADER  */
@@ -29,7 +29,7 @@
   justify-content: start;
 }
 
-.App-body p{
+.App-body p {
   margin-top: 3.5rem;
   margin-left: 3rem;
 }
