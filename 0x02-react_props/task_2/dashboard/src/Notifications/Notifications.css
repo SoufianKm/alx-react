@@ -11,10 +11,10 @@
   width: 20px;
 }
 
-[data-priority="default"] {
+[data-notification-type="default"] {
   color: #210a61;
 }
 
-[data-priority="urgent"] {
+[data-notification-type="urgent"] {
   color: #e01d3f;
 }
