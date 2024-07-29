@@ -1,0 +1,21 @@
+import "./Login.css";
+import React from "react";
+
+function Login() {
+  return (
+    <>
+      <p>Login to access the full dashboard</p>
+      <div className="login-section">
+        <form>
+          <label htmlFor="email">Email: </label>
+          <input type="email" id="email" name="email" />
+          <label htmlFor="password">Password: </label>
+          <input type="password" id="password" name="password" />
+          <button>Ok</button>
+        </form>
+      </div>
+    </>
+  );
+}
+
+export default Login;
