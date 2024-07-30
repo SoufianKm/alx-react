@@ -1,41 +1,26 @@
 import React from "react";
-import "./CourseList.css";
+import CourseList from "./CourseList";
 import CourseListRow from "./CourseListRow";
+import { shallow } from "enzyme";
 
-function CourseList() {
-  return (
-    <table id="CourseList">
-      <thead>
-        <CourseListRow
-          textFirstCell="Available courses"
-          textSecondCell={null}
-          isHeader={true}
-        />
-        <CourseListRow
-          textFirstCell="Course name"
-          textSecondCell="Credit"
-          isHeader={true}
-        />
-      </thead>
-      <tbody>
-        <CourseListRow
-          textFirstCell="ES6"
-          textSecondCell="60"
-          isHeader={false}
-        />
-        <CourseListRow
-          textFirstCell="Webpack"
-          textSecondCell="20"
-          isHeader={false}
-        />
-        <CourseListRow
-          textFirstCell="React"
-          textSecondCell="40"
-          isHeader={false}
-        />
-      </tbody>
-    </table>
-  );
-}
+describe("CourseList component tests", () => {
+  it("should render without crashing", () => {
+    const wrapper = shallow(<CourseList />);
 
-export default CourseList;
+    expect(wrapper.exists()).toBe(true);
+  });
+
+  it("renders 5 different rows", () => {
+    const wrapper = shallow(<CourseList />);
+
+    expect(wrapper.find("thead").children()).toHaveLength(2);
+    wrapper.find("thead").forEach((node) => {
+      expect(node.equals(<CourseListRow textFirstCell="Foo" />));
+    });
+
+    expect(wrapper.find("tbody").children()).toHaveLength(3);
+    wrapper.find("tbody").forEach((node) => {
+      expect(node.equals(<CourseListRow textFirstCell="Foo" />));
+    });
+  });
+});
