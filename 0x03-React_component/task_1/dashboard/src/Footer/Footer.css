@@ -1,0 +1,12 @@
+/*****************************************/
+/*  FOOTER  */
+.App-footer {
+    border-top: 5px solid #e0354b;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .App-footer p {
+    font-style: italic;
+  }
+  
