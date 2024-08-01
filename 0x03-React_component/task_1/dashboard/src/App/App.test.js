@@ -69,31 +69,51 @@ describe("App Component", () => {
   let logOutMock;
 
   beforeEach(() => {
-    // Create a mock for the logOut function
     logOutMock = jest.fn();
-    // Shallow render the App component with the logOut prop
     wrapper = shallow(<App logOut={logOutMock} />);
   });
 
   afterEach(() => {
-    jest.clearAllMocks(); // Clear all mocks after each test
+    jest.clearAllMocks();
   });
 
-  it("calls logOut and alerts with the correct message when ctrl+h is pressed", () => {
+  it('should call logOut and alert with "Logging you out" when control and h keys are pressed', () => {
     // Mock the alert function
-    const alertSpy = jest.spyOn(window, "alert").mockImplementation(() => {});
+    global.alert = jest.fn();
 
-    // Simulate the ctrl+h keydown event
-    const event = new KeyboardEvent("keydown", { key: "h", ctrlKey: true });
+    // Simulate the keydown event for 'Control' + 'h'
+    const event = new KeyboardEvent("keydown", {
+      key: "h",
+      ctrlKey: true,
+    });
     document.dispatchEvent(event);
 
-    // Check if the logOut function was called
+    expect(global.alert).toHaveBeenCalledWith("Logging you out");
     expect(logOutMock).toHaveBeenCalled();
 
-    // Check if the alert was called with the correct message
-    expect(alertSpy).toHaveBeenCalledWith("Logging you out");
+    // Cleanup the mock for alert
+    global.alert.mockRestore();
+  });
 
-    // Restore the original alert implementation
-    alertSpy.mockRestore();
+  it("should not call logOut if only control key is pressed", () => {
+    // Simulate the keydown event for 'Control' only
+    const event = new KeyboardEvent("keydown", {
+      key: "Control",
+      ctrlKey: true,
+    });
+    document.dispatchEvent(event);
+
+    expect(logOutMock).not.toHaveBeenCalled();
+  });
+
+  it("should not call logOut if only h key is pressed", () => {
+    // Simulate the keydown event for 'h' only
+    const event = new KeyboardEvent("keydown", {
+      key: "h",
+      ctrlKey: false,
+    });
+    document.dispatchEvent(event);
+
+    expect(logOutMock).not.toHaveBeenCalled();
   });
 });
