@@ -1,0 +1,31 @@
+:root {
+  --color-brand: #e0354b;
+}
+
+.Notifications {
+  padding: 0.5rem;
+  border: 2px dashed var(--color-brand);
+}
+
+.Notifications button img {
+  width: 20px;
+}
+
+[data-notification-type="default"] {
+  color: #210a61;
+}
+
+[data-notification-type="urgent"] {
+  color: #e01d3f;
+}
+
+.menuItem {
+  text-align: right;
+}
+
+.flex-area {
+  position: absolute;
+  width: 35%;
+  right: 0;
+  margin-right: 1rem;
+}
