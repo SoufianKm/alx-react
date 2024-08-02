@@ -44,26 +44,7 @@ function Notifications({ displayDrawer, listNotifications }) {
                 </ul>
               </>
             ) : (
-              <>
-                <p>No new notification for now</p>
-                <button
-                  style={{
-                    color: "#3a3a3a",
-                    fontWeight: "bold",
-                    background: "none",
-                    border: "none",
-                    fontSize: "10px",
-                    position: "absolute",
-                    right: "2px",
-                    top: "2px",
-                    cursor: "pointer",
-                  }}
-                  aria-label="Close"
-                  onClick={console.log("Close button has been clicked")}
-                >
-                  <img src={close} alt="closeIcon" width="10px" />
-                </button>
-              </>
+              <p>No new notification for now</p>
             )}
           </div>
         </div>

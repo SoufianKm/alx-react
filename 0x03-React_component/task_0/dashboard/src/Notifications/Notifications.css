@@ -15,7 +15,8 @@
   color: #210a61;
 }
 
-[data-notification-type="urgent"] {
+[data-notification-type="urgent"],
+[data-urgent] {
   color: #e01d3f;
 }
 
