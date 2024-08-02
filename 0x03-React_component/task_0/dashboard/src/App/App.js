@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import Login from "../Login/Login";
 import Footer from "../Footer/Footer";
 import "./App.css";
@@ -8,7 +8,7 @@ import CourseList from "../CourseList/CourseList";
 import PropTypes from "prop-types";
 import { getLatestNotification } from "../utils/utils";
 
-class App extends Component {
+class App extends React.Component {
   listCourses = [
     { id: 1, name: "ES6", credit: 60 },
     { id: 2, name: "Webpack", credit: 20 },
