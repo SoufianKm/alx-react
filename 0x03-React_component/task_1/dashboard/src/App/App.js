@@ -14,6 +14,7 @@ class App extends Component {
     { id: 2, name: "Webpack", credit: 20 },
     { id: 3, name: "React", credit: 40 },
   ];
+
   listNotifications = [
     { id: 1, type: "default", value: "New course available" },
     { id: 2, type: "urgent", value: "New resume available" },
@@ -23,16 +24,17 @@ class App extends Component {
   componentDidMount() {
     document.addEventListener("keydown", this.handleKeyPress);
   }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.handleKeyPress);
+  }
+
   handleKeyPress = (event) => {
     if (event.ctrlKey && event.key === "h") {
       alert("Logging you out");
       this.props.logOut();
     }
   };
-
-  componentWillUnmount() {
-    document.removeEventListener("keydown", this.handleKeyPress);
-  }
 
   render() {
     return (
@@ -60,9 +62,7 @@ class App extends Component {
 
 App.defaultProps = {
   isLoggedIn: false,
-  logOut: () => {
-    return;
-  },
+  logOut: () => {},
 };
 
 App.propTypes = {

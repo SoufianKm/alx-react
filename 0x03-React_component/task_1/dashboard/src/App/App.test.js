@@ -41,6 +41,7 @@ describe("<App />", () => {
   test("should render Login Component", () => {
     expect(wrapper.contains(<Login />)).toBe(true);
   });
+
   test("should render Footer component", () => {
     expect(wrapper.contains(<Footer />)).toBe(true);
   });
@@ -53,14 +54,12 @@ describe("when isLoggedIn prop is true", () => {
     wrapper = shallow(<App isLoggedIn={true} />);
   });
 
-  test("does not render courselist if logged out", () => {
-    wrapper.setProps({ isLoggedIn: false });
-    expect(wrapper.contains(<CourseList />)).toBe(false);
+  test("does not render Login if logged in", () => {
+    expect(wrapper.contains(<Login />)).toBe(false);
   });
 
-  test("renders courselist if logged in", () => {
-    expect(wrapper.containsMatchingElement(<CourseList />)).toEqual(false);
-    expect(wrapper.contains(<Login />)).toBe(false);
+  test("renders CourseList if logged in", () => {
+    expect(wrapper.containsMatchingElement(<CourseList />)).toBe(true);
   });
 });
 
@@ -78,10 +77,8 @@ describe("App Component", () => {
   });
 
   it('should call logOut and alert with "Logging you out" when control and h keys are pressed', () => {
-    // Mock the alert function
     global.alert = jest.fn();
 
-    // Simulate the keydown event for 'Control' + 'h'
     const event = new KeyboardEvent("keydown", {
       key: "h",
       ctrlKey: true,
@@ -91,12 +88,10 @@ describe("App Component", () => {
     expect(global.alert).toHaveBeenCalledWith("Logging you out");
     expect(logOutMock).toHaveBeenCalled();
 
-    // Cleanup the mock for alert
     global.alert.mockRestore();
   });
 
   it("should not call logOut if only control key is pressed", () => {
-    // Simulate the keydown event for 'Control' only
     const event = new KeyboardEvent("keydown", {
       key: "Control",
       ctrlKey: true,
@@ -107,7 +102,6 @@ describe("App Component", () => {
   });
 
   it("should not call logOut if only h key is pressed", () => {
-    // Simulate the keydown event for 'h' only
     const event = new KeyboardEvent("keydown", {
       key: "h",
       ctrlKey: false,
