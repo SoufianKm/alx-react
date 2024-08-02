@@ -8,14 +8,6 @@ describe("<Notifications />", () => {
     shallow(<Notifications />);
   });
 
-  // it("renders three list items", () => {
-  //   const wrapper = shallow(<Notifications />);
-  //   expect(wrapper.find("ul").children()).toHaveLength(3);
-  //   wrapper.find("ul").forEach((node) => {
-  //     expect(node.equals(<NotificationItem />));
-  //   });
-  // });
-
   it("renders correct text when listNotifications is not empty", () => {
     const listNotifications = [
       { id: 1, type: "default", value: "New course available" },
@@ -49,7 +41,7 @@ describe("<Notifications />", () => {
     expect(wrapper.find("div.Notifications").exists()).toBe(false);
   });
 
-  it("does not display menuItem when displayDrawer is true", () => {
+  it("displays menuItem when displayDrawer is true", () => {
     const wrapper = shallow(<Notifications displayDrawer={true} />);
 
     expect(wrapper.find("div.menuItem").exists()).toBe(true);
@@ -61,10 +53,12 @@ describe("<Notifications />", () => {
     expect(wrapper.find("div.Notifications").exists()).toBe(true);
   });
 
-  it("renders correctly when listCourses is not passed", () => {
+  it("renders correctly when listNotifications is not passed", () => {
     const wrapper = shallow(<Notifications displayDrawer={true} />);
 
-    expect(wrapper.containsMatchingElement(<p>No new notification for now</p>));
+    expect(
+      wrapper.containsMatchingElement(<p>No new notification for now</p>)
+    ).toBe(true);
   });
 
   it("renders correctly when empty array is passed", () => {
@@ -72,7 +66,9 @@ describe("<Notifications />", () => {
       <Notifications displayDrawer={true} listNotifications={[]} />
     );
 
-    expect(wrapper.containsMatchingElement(<p>No new notification for now</p>));
+    expect(
+      wrapper.containsMatchingElement(<p>No new notification for now</p>)
+    ).toBe(true);
   });
 
   it('renders "No new notifications for now" instead of "Here is the list of notifications" when listNotifications is empty', () => {
@@ -84,7 +80,9 @@ describe("<Notifications />", () => {
       wrapper.containsMatchingElement(<p>Here is the list of notifications</p>)
     ).toBe(false);
 
-    expect(wrapper.containsMatchingElement(<p>No new notification for now</p>));
+    expect(
+      wrapper.containsMatchingElement(<p>No new notification for now</p>)
+    ).toBe(true);
   });
 });
 
@@ -103,5 +101,52 @@ describe("Notifications Component", () => {
 
     // Cleanup
     logSpy.mockRestore();
+  });
+
+  it("does not rerender when updating props with the same list", () => {
+    const listNotifications = [
+      { id: 1, type: "default", value: "New course available" },
+      { id: 2, type: "urgent", value: "New resume available" },
+    ];
+
+    const wrapper = shallow(
+      <Notifications
+        displayDrawer={true}
+        listNotifications={listNotifications}
+      />
+    );
+
+    const instance = wrapper.instance();
+    jest.spyOn(instance, "render");
+
+    // Update props with the same list
+    wrapper.setProps({ listNotifications });
+
+    expect(instance.render).toHaveBeenCalledTimes(0);
+  });
+
+  it("rerenders when updating props with a longer list", () => {
+    const initialList = [
+      { id: 1, type: "default", value: "New course available" },
+      { id: 2, type: "urgent", value: "New resume available" },
+    ];
+
+    const longerList = [
+      { id: 1, type: "default", value: "New course available" },
+      { id: 2, type: "urgent", value: "New resume available" },
+      { id: 3, type: "default", value: "New project available" },
+    ];
+
+    const wrapper = shallow(
+      <Notifications displayDrawer={true} listNotifications={initialList} />
+    );
+
+    const instance = wrapper.instance();
+    jest.spyOn(instance, "render");
+
+    // Update props with a longer list
+    wrapper.setProps({ listNotifications: longerList });
+
+    expect(instance.render).toHaveBeenCalled();
   });
 });
