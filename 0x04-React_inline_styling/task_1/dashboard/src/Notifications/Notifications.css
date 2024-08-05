@@ -1,0 +1,12 @@
+:root {
+  --color-brand: #e0354b;
+}
+
+[data-notification-type="default"] {
+  color: #210a61;
+}
+
+[data-notification-type="urgent"],
+[data-urgent] {
+  color: #e01d3f;
+}
