@@ -1,0 +1,34 @@
+/*****************************************/
+/*  BODY FOR COURSE LIST  */
+.courses {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #ddd;
+  font-size: 1.1rem;
+}
+
+thead th {
+  font-weight: bold;
+}
+
+thead tr:first-child th {
+  text-align: center;
+  border-bottom: none;
+  border-bottom: 2px solid #ddd;
+}
+
+thead tr:nth-child(2) th {
+  text-align: left;
+  border-bottom: 2px solid #ddd;
+}
+
+tbody tr td {
+  text-align: left;
+}
+
