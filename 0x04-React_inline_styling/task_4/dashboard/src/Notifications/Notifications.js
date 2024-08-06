@@ -119,6 +119,9 @@ const styles = StyleSheet.create({
   menuItem: {
     textAlign: "right",
     cursor: "pointer",
+    background: "#fff8f8",
+    width: "fitContent",
+    float: "right",
     ":hover": {
       animationName: [opacityKeyframes, translateKeyframes],
       animationDuration: "1s, 0.5s",
