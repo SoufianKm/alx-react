@@ -41,10 +41,10 @@ class App extends Component {
       <React.Fragment>
         <Notifications listNotifications={this.listNotifications} />
         <div className={css(styles.app)}>
-          <div className={css(styles.appHeader)}>
+          <div className={css(styles.header)}>
             <Header />
           </div>
-          <div className={css(styles.appBody)}>
+          <div className={css(styles.body)}>
             {this.props.isLoggedIn ? (
               <BodySectionWithMarginBottom title="Course list">
                 <CourseList listCourses={this.listCourses} />
@@ -63,7 +63,7 @@ class App extends Component {
               </p>
             </BodySection>
           </div>
-          <div className={css(styles.appFooter)}>
+          <div className={css(styles.footer)}>
             <Footer />
           </div>
         </div>
@@ -86,17 +86,17 @@ App.propTypes = {
 
 const styles = StyleSheet.create({
   app: { textAlign: "center" },
-  appBody: {
+  body: {
     minHeight: "100vh",
     margin: "3rem",
   },
-  appFooter: {
+  footer: {
     borderTop: "5px solid #e0354b",
     display: "flex",
     justifyContent: "center",
     fontStyle: "italic",
   },
-  appHeader: {
+  header: {
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-start",

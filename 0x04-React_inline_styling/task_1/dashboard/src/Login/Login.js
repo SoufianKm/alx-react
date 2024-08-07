@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     justifyContent: "start",
     flexDirection: "column",
     alignItems: "flex-start",
+    margin: "0px",
   },
   loginSection: {
     display: "inline-flex",

@@ -1,7 +1,9 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import BodySection from "./BodySection";
-import { StyleSheet, css } from "aphrodite";
+import { StyleSheet, StyleSheetTestUtils, css } from "aphrodite";
+
+StyleSheetTestUtils.suppressStyleInjection();
 
 class BodySectionWithMarginBottom extends Component {
   render() {
