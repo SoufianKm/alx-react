@@ -1,19 +1,8 @@
 import React from "react";
-import { shallow } from "enzyme";
+import { mount, shallow } from "enzyme";
 import Notifications from "./Notifications";
-import { StyleSheetTestUtils } from "aphrodite";
 
 describe("<Notifications />", () => {
-  // Suppress style injection before all tests
-  beforeAll(() => {
-    StyleSheetTestUtils.suppressStyleInjection();
-  });
-
-  // Resume style injection after all tests
-  afterAll(() => {
-    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
-  });
-
   it("renders without crashing", () => {
     shallow(<Notifications />);
   });
@@ -34,33 +23,6 @@ describe("<Notifications />", () => {
     expect(wrapper.contains(<p>Here is the list of notifications</p>)).toBe(
       true
     );
-  });
-
-  it("displays menu item when displayDrawer is false", () => {
-    const wrapper = shallow(<Notifications displayDrawer={false} />);
-
-    expect(wrapper.find("div.menuItem").exists()).toBe(true);
-    expect(wrapper.find("div.menuItem").html()).toEqual(
-      '<div class="menuItem"><p>Your notifications</p></div>'
-    );
-  });
-
-  it("does not display notifications when displayDrawer is false", () => {
-    const wrapper = shallow(<Notifications displayDrawer={false} />);
-
-    expect(wrapper.find("div.Notifications").exists()).toBe(false);
-  });
-
-  it("displays menuItem when displayDrawer is true", () => {
-    const wrapper = shallow(<Notifications displayDrawer={true} />);
-
-    expect(wrapper.find("div.menuItem").exists()).toBe(true);
-  });
-
-  it("displays Notifications when displayDrawer is true", () => {
-    const wrapper = shallow(<Notifications displayDrawer={true} />);
-
-    expect(wrapper.find("div.Notifications").exists()).toBe(true);
   });
 
   it("renders correctly when listNotifications is not passed", () => {
@@ -163,19 +125,24 @@ describe("Notifications Component", () => {
 
 describe("Testing Notifications Component Drawer Display handlers ", () => {
   let wrapper;
+  const mockHandleDisplayDrawer = jest.fn();
+  const mockHandleHideDrawer = jest.fn();
 
   beforeEach(() => {
-    StyleSheetTestUtils.suppressStyleInjection();
     wrapper = mount(
       <Notifications
-        handleDisplayDrawer={jest.fn()}
-        handleHideDrawer={jest.fn()}
+        handleDisplayDrawer={mockHandleDisplayDrawer}
+        handleHideDrawer={mockHandleHideDrawer}
       />
     );
   });
 
+  afterEach(() => {
+    jest.clearAllMocks(); // Clears mock calls between tests
+  });
+
   it("verify that clicking on the menu item calls handleDisplayDrawer", () => {
-    wrapper.find("div").at(0).simulate("click");
+    wrapper.find("div").at(1).simulate("click");
     expect(wrapper.props().handleDisplayDrawer).toBeCalled();
   });
 

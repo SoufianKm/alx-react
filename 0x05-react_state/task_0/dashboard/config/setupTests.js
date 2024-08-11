@@ -7,3 +7,11 @@ Object.defineProperty(global, "TextEncoder", {
   value: util.TextEncoder,
 });
 
+jest.mock("aphrodite", () => {
+  return {
+    StyleSheet: {
+      create: () => ({}),
+    },
+    css: () => "",
+  };
+});

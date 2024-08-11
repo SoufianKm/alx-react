@@ -38,6 +38,7 @@ class Notifications extends Component {
                 aria-label="Close"
                 onClick={() => {
                   console.log("Close button has been clicked");
+                  this.props.handleHideDrawer();
                 }}
               >
                 <img src={close} alt="close" className={css(styles.img)} />

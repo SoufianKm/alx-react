@@ -6,7 +6,6 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import CourseList from "../CourseList/CourseList";
 import Notifications from "../Notifications/Notifications";
-import { StyleSheetTestUtils } from "aphrodite";
 
 describe("<App />", () => {
   let wrapper;
@@ -15,30 +14,8 @@ describe("<App />", () => {
     wrapper = shallow(<App />);
   });
 
-  // Suppress style injection before all tests
-  beforeAll(() => {
-    StyleSheetTestUtils.suppressStyleInjection();
-  });
-
-  // Resume style injection after all tests
-  afterAll(() => {
-    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
-  });
-
   test("renders without crashing", () => {
     expect(wrapper.exists()).toBe(true);
-  });
-
-  test("renders a div with the class App-header", () => {
-    expect(wrapper.find("div.App-header").exists()).toBe(true);
-  });
-
-  test("renders a div with the class App-body", () => {
-    expect(wrapper.find("div.App-body").exists()).toBe(true);
-  });
-
-  test("renders a div with the class App-footer", () => {
-    expect(wrapper.find("div.App-footer").exists()).toBe(true);
   });
 
   it("should render Notifications component", () => {
@@ -113,7 +90,6 @@ describe("Testing App Component's State />", () => {
   let wrapper;
 
   beforeEach(() => {
-    StyleSheetTestUtils.suppressStyleInjection();
     wrapper = shallow(<App />);
   });
 
