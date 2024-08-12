@@ -1,12 +1,10 @@
 import React from "react";
 import NotificationItem from "./NotificationItem";
 import { shallow } from "enzyme";
-import { StyleSheet, css } from "aphrodite";
 
 describe("rendering components", () => {
   // Suppress style injection before all tests
   beforeAll(() => {
-    StyleSheetTestUtils.suppressStyleInjection();
     global.document = {
       querySelector: jest.fn(() => ({
         setAttribute: jest.fn(),
@@ -16,7 +14,6 @@ describe("rendering components", () => {
 
   // Resume style injection after all tests
   afterAll(() => {
-    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
     delete global.document;
   });
 

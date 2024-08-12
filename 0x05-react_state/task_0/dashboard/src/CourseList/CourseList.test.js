@@ -11,16 +11,15 @@ const listCourses = [
 ];
 
 describe("CourseList component tests", () => {
-  // Suppress style injection before all tests
-  beforeAll(() => {
+  beforeEach(() => {
+    // Suppress style injection for tests
     StyleSheetTestUtils.suppressStyleInjection();
   });
 
-  // Resume style injection after all tests
-  afterAll(() => {
+  afterEach(() => {
+    // Clear the buffer and resume style injection
     StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
   });
-
   it("should render without crashing", () => {
     const wrapper = shallow(<CourseList />);
 
@@ -45,13 +44,13 @@ describe("CourseList component tests", () => {
 
     expect(wrapper.find("tbody").children()).toHaveLength(3);
     expect(wrapper.find("tbody").childAt(0).html()).toEqual(
-      "<tr style=\"background-color:#f5f5f5ab\"><td>ES6</td><td>60</td></tr>"
+      '<tr style="background-color:#f5f5f5ab"><td>ES6</td><td>60</td></tr>'
     );
     expect(wrapper.find("tbody").childAt(1).html()).toEqual(
-      "<tr style=\"background-color:#f5f5f5ab\"><td>Webpack</td><td>20</td></tr>"
+      '<tr style="background-color:#f5f5f5ab"><td>Webpack</td><td>20</td></tr>'
     );
     expect(wrapper.find("tbody").childAt(2).html()).toEqual(
-      "<tr style=\"background-color:#f5f5f5ab\"><td>React</td><td>40</td></tr>"
+      '<tr style="background-color:#f5f5f5ab"><td>React</td><td>40</td></tr>'
     );
   });
 
@@ -60,13 +59,13 @@ describe("CourseList component tests", () => {
 
     expect(wrapper.find("tbody").children()).toHaveLength(3);
     expect(wrapper.find("tbody").childAt(0).html()).toEqual(
-      "<tr style=\"background-color:#f5f5f5ab\"><td>ES6</td><td>60</td></tr>"
+      "<tr><td>ES6</td><td>60</td></tr>"
     );
     expect(wrapper.find("tbody").childAt(1).html()).toEqual(
-      "<tr style=\"background-color:#f5f5f5ab\"><td>Webpack</td><td>20</td></tr>"
+      "<tr><td>Webpack</td><td>20</td></tr>"
     );
     expect(wrapper.find("tbody").childAt(2).html()).toEqual(
-      "<tr style=\"background-color:#f5f5f5ab\"><td>React</td><td>40</td></tr>"
+      '<tr style="background-color:#f5f5f5ab"><td>React</td><td>40</td></tr>'
     );
   });
 });

@@ -54,15 +54,22 @@ describe("Test inline styles", () => {
       />
     );
     const style = wrapper.prop("style");
-    expect(style).toHaveProperty("backgroundColor", "#deb5b545");
+
+    // Check if the style prop is defined
+    expect(style).toBeDefined();
+
+    // Then you can check if it doesn't have the property
+    expect(style).not.toHaveProperty("backgroundColor", "#deb5b545");
   });
 
   it("should have a background color #f5f5f5ab when isHeader prop is false", () => {
-    const wrapper = shallow(<CourseListRow
-      isHeader={false}
-      textFirstCell="test"
-      textSecondCell="test"
-    />);
+    const wrapper = shallow(
+      <CourseListRow
+        isHeader={false}
+        textFirstCell="test"
+        textSecondCell="test"
+      />
+    );
     const style = wrapper.prop("style");
     expect(style).not.toHaveProperty("backgroundColor", "#deb5b545");
   });

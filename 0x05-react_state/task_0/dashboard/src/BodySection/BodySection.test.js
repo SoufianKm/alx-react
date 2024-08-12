@@ -1,19 +1,8 @@
 import React from "react";
 import BodySection from "./BodySection";
 import { shallow } from "enzyme";
-import { StyleSheetTestUtils } from "aphrodite";
 
 describe("BodySection tests", () => {
-  // Suppress style injection before all tests
-  beforeAll(() => {
-    StyleSheetTestUtils.suppressStyleInjection();
-  });
-
-  // Resume style injection after all tests
-  afterAll(() => {
-    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
-  });
-
   it("should render correctly", () => {
     const wrapper = shallow(
       <BodySection title="test title">

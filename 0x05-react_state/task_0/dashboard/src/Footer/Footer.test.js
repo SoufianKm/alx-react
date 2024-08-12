@@ -2,18 +2,8 @@ import { shallow } from "enzyme";
 import React from "react";
 import Footer from "./Footer";
 import { getFullYear, getFooterCopy } from "../utils/utils";
-import { StyleSheetTestUtils } from "aphrodite";
 
 describe("<Footer />", () => {
-  // Suppress style injection before all tests
-  beforeAll(() => {
-    StyleSheetTestUtils.suppressStyleInjection();
-  });
-
-  // Resume style injection after all tests
-  afterAll(() => {
-    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
-  });
 
   it("should render without crashing", () => {
     const wrapper = shallow(<Footer />);
