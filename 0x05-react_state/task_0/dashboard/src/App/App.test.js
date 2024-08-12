@@ -6,12 +6,20 @@ import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
 import CourseList from "../CourseList/CourseList";
 import Notifications from "../Notifications/Notifications";
+import { StyleSheetTestUtils } from "aphrodite";
 
 describe("<App />", () => {
   let wrapper;
 
   beforeEach(() => {
     wrapper = shallow(<App />);
+    // Suppress style injection for tests
+    StyleSheetTestUtils.suppressStyleInjection();
+  });
+
+  afterEach(() => {
+    // Clear the buffer and resume style injection
+    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
   });
 
   test("renders without crashing", () => {
@@ -39,6 +47,12 @@ describe("when isLoggedIn prop is true", () => {
 
   beforeEach(() => {
     wrapper = shallow(<App isLoggedIn={true} />);
+    StyleSheetTestUtils.suppressStyleInjection();
+  });
+
+  afterEach(() => {
+    // Clear the buffer and resume style injection
+    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
   });
 
   test("does not render courselist if logged out", () => {
@@ -57,6 +71,8 @@ describe("App Component", () => {
   let logOutMock;
 
   beforeEach(() => {
+    // Suppress style injection for tests
+    StyleSheetTestUtils.suppressStyleInjection();
     // Create a mock for the logOut function
     logOutMock = jest.fn();
     // Shallow render the App component with the logOut prop
@@ -65,6 +81,9 @@ describe("App Component", () => {
 
   afterEach(() => {
     jest.clearAllMocks(); // Clear all mocks after each test
+
+    // Clear the buffer and resume style injection
+    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
   });
 
   it("calls logOut and alerts with the correct message when ctrl+h is pressed", () => {
@@ -87,6 +106,16 @@ describe("App Component", () => {
 });
 
 describe("Testing App Component's State />", () => {
+  beforeEach(() => {
+    // Suppress style injection for tests
+    StyleSheetTestUtils.suppressStyleInjection();
+  });
+
+  afterEach(() => {
+    // Clear the buffer and resume style injection
+    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
+  });
+
   let wrapper;
 
   beforeEach(() => {

@@ -1,8 +1,19 @@
 import React from "react";
 import { mount, shallow } from "enzyme";
 import Notifications from "./Notifications";
+import { StyleSheetTestUtils } from "aphrodite";
 
 describe("<Notifications />", () => {
+  beforeEach(() => {
+    // Suppress style injection for tests
+    StyleSheetTestUtils.suppressStyleInjection();
+  });
+
+  afterEach(() => {
+    // Clear the buffer and resume style injection
+    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
+  });
+
   it("renders without crashing", () => {
     shallow(<Notifications />);
   });
@@ -59,6 +70,16 @@ describe("<Notifications />", () => {
 });
 
 describe("Notifications Component", () => {
+  beforeEach(() => {
+    // Suppress style injection for tests
+    StyleSheetTestUtils.suppressStyleInjection();
+  });
+
+  afterEach(() => {
+    // Clear the buffer and resume style injection
+    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
+  });
+
   it("should call console.log with the correct message when markAsRead is called", () => {
     const logSpy = jest.spyOn(console, "log");
     const wrapper = shallow(<Notifications />);
@@ -135,10 +156,13 @@ describe("Testing Notifications Component Drawer Display handlers ", () => {
         handleHideDrawer={mockHandleHideDrawer}
       />
     );
+    // Suppress style injection for tests
+    StyleSheetTestUtils.suppressStyleInjection();
   });
 
   afterEach(() => {
-    jest.clearAllMocks(); // Clears mock calls between tests
+    // Clear the buffer and resume style injection
+    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
   });
 
   it("verify that clicking on the menu item calls handleDisplayDrawer", () => {
