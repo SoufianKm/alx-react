@@ -24,10 +24,17 @@ class Notifications extends Component {
   }
 
   render() {
-    const show = css(this.props.displayDrawer ? styles.showOff : styles.showOn);
+    const {
+      displayDrawer,
+      listNotifications,
+      handleDisplayDrawer,
+      handleHideDrawer,
+    } = this.props;
+    const show = css(displayDrawer ? styles.showOff : styles.showOn);
+
     return (
       <React.Fragment>
-        {this.props.displayDrawer ? (
+        {displayDrawer ? (
           <div className={css(styles.flexArea)}>
             <div className={(css(styles.menuItem), show)}>
               <p>Your notifications</p>
@@ -38,29 +45,26 @@ class Notifications extends Component {
                 aria-label="Close"
                 onClick={() => {
                   console.log("Close button has been clicked");
-                  this.props.handleHideDrawer();
+                  handleHideDrawer();
                 }}
               >
                 <img src={close} alt="close" className={css(styles.img)} />
               </button>
 
-              {this.props.listNotifications &&
-              this.props.listNotifications.length > 0 ? (
+              {listNotifications && listNotifications.length > 0 ? (
                 <>
                   <p>Here is the list of notifications</p>
                   <ul className={css(styles.ul)}>
-                    {this.props.listNotifications.map(
-                      ({ id, html, type, value }) => (
-                        <NotificationItem
-                          key={id}
-                          type={type}
-                          value={value}
-                          html={html}
-                          markAsRead={this.markAsRead}
-                          id={id}
-                        />
-                      )
-                    )}
+                    {listNotifications.map(({ id, html, type, value }) => (
+                      <NotificationItem
+                        key={id}
+                        type={type}
+                        value={value}
+                        html={html}
+                        markAsRead={this.markAsRead}
+                        id={id}
+                      />
+                    ))}
                   </ul>
                 </>
               ) : (
@@ -72,7 +76,7 @@ class Notifications extends Component {
           <div className={css(styles.flexArea)}>
             <div
               className={css(styles.menuItem)}
-              onClick={this.props.handleDisplayDrawer}
+              onClick={handleDisplayDrawer()}
             >
               <p>Your notifications</p>
             </div>
