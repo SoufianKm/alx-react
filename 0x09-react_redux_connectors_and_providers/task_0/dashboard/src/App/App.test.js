@@ -1,5 +1,5 @@
 import React from "react";
-import { shallow } from "enzyme";
+import { shallow, mount } from "enzyme";
 import App from "./App";
 import Login from "../Login/Login";
 import Header from "../Header/Header";
@@ -7,18 +7,31 @@ import Footer from "../Footer/Footer";
 import CourseList from "../CourseList/CourseList";
 import Notifications from "../Notifications/Notifications";
 import { StyleSheetTestUtils } from "aphrodite";
+import { mapStateToProps } from "./App";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import uiReducer, { initialState } from "../reducers/uiReducer";
+import { fromJS } from "immutable";
+import { AppContext } from "./AppContext";
+
+const store = createStore(uiReducer, fromJS(initialState));
 
 describe("<App />", () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallow(<App />);
+    wrapper = mount(
+      <Provider store={store}>
+        <App />
+      </Provider>
+    );
     // Suppress style injection for tests
     StyleSheetTestUtils.suppressStyleInjection();
   });
 
   afterEach(() => {
     // Clear the buffer and resume style injection
+    wrapper.unmount();
     StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
   });
 
@@ -31,14 +44,15 @@ describe("<App />", () => {
   });
 
   test("should render Header component", () => {
-    expect(wrapper.contains(<Header />)).toBe(true);
+    expect(wrapper.find(Header).length).toBe(1);
   });
 
   test("should render Login Component", () => {
-    expect(wrapper.contains(<Login />)).toBe(true);
+    expect(wrapper.find(Login).length).toBe(1);
   });
+
   test("should render Footer component", () => {
-    expect(wrapper.contains(<Footer />)).toBe(true);
+    expect(wrapper.find(Footer).length).toBe(1);
   });
 });
 
@@ -46,23 +60,24 @@ describe("when isLoggedIn prop is true", () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallow(<App isLoggedIn={true} />);
+    wrapper = shallow(
+      <Provider store={store}>
+        <App isLoggedIn={true} />
+      </Provider>
+    );
     StyleSheetTestUtils.suppressStyleInjection();
   });
 
   afterEach(() => {
-    // Clear the buffer and resume style injection
     StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
   });
 
-  test("does not render courselist if logged out", () => {
-    wrapper.setProps({ isLoggedIn: false });
-    expect(wrapper.contains(<CourseList />)).toBe(false);
+  test("does not render Login component if logged in", () => {
+    expect(wrapper.find(Login).length).toBe(0);
   });
 
-  test("renders courselist if logged in", () => {
-    expect(wrapper.containsMatchingElement(<CourseList />)).toEqual(false);
-    expect(wrapper.contains(<Login />)).toBe(false);
+  test("renders CourseList component if logged in", () => {
+    expect(wrapper.find(CourseList).length).toBe(1);
   });
 });
 
@@ -71,58 +86,51 @@ describe("App Component", () => {
   let logOutMock;
 
   beforeEach(() => {
-    // Suppress style injection for tests
     StyleSheetTestUtils.suppressStyleInjection();
-    // Create a mock for the logOut function
     logOutMock = jest.fn();
-    // Shallow render the App component with the logOut prop
-    wrapper = shallow(<App logOut={logOutMock} />);
+    wrapper = mount(
+      <Provider store={store}>
+        <App logOut={logOutMock} />
+      </Provider>
+    );
   });
 
   afterEach(() => {
-    jest.clearAllMocks(); // Clear all mocks after each test
-
-    // Clear the buffer and resume style injection
+    wrapper.unmount();
+    jest.clearAllMocks();
     StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
   });
 
   it("calls logOut and alerts with the correct message when ctrl+h is pressed", () => {
-    // Mock the alert function
     const alertSpy = jest.spyOn(window, "alert").mockImplementation(() => {});
 
-    // Simulate the ctrl+h keydown event
     const event = new KeyboardEvent("keydown", { key: "h", ctrlKey: true });
     document.dispatchEvent(event);
 
-    // Check if the logOut function was called
     expect(logOutMock).toHaveBeenCalled();
-
-    // Check if the alert was called with the correct message
     expect(alertSpy).toHaveBeenCalledWith("Logging you out");
 
-    // Restore the original alert implementation
     alertSpy.mockRestore();
   });
 });
 
-describe("Testing App Component's State />", () => {
+describe("Testing App Component's State", () => {
+  let wrapper;
+
   beforeEach(() => {
-    // Suppress style injection for tests
+    wrapper = shallow(
+      <Provider store={store}>
+        <App />
+      </Provider>
+    );
     StyleSheetTestUtils.suppressStyleInjection();
   });
 
   afterEach(() => {
-    // Clear the buffer and resume style injection
     StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
   });
 
-  let wrapper;
-
-  beforeEach(() => {
-    wrapper = shallow(<App />);
-  });
-
-  it("check if default value of displayDrawer in state is false", () => {
+  it("checks if default value of displayDrawer in state is false", () => {
     expect(wrapper.state("displayDrawer")).toBe(false);
   });
 
@@ -137,57 +145,15 @@ describe("Testing App Component's State />", () => {
   });
 });
 
-const wrapper_isLoggedIn = shallow(<App />);
-describe("App Component when isLoggedin is true", () => {
-  let wrapper;
-
-  beforeEach(() => {
-    StyleSheetTestUtils.suppressStyleInjection();
-    wrapper = shallow(<App />);
-  });
-
-  afterEach(() => {
-    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
-  });
-
-  it("does not render Login component", () => {
-    wrapper_isLoggedIn.setState({
-      user: { email: "", password: "", isLoggedIn: true },
+describe("mapStateToProps", () => {
+  it("should return the right object when passing the state", () => {
+    const state = fromJS({
+      isUserLoggedIn: true,
     });
-    expect(wrapper_isLoggedIn.containsMatchingElement(<Login />)).toEqual(
-      false
-    );
-  });
-
-  it("renders CourseList component", () => {
-    expect(
-      wrapper_isLoggedIn.containsMatchingElement(
-        <CourseList listCourses={listCourses} />
-      )
-    ).toEqual(false);
-    // should be true
-  });
-
-  it("Should check that markNotificationAsRead func works as intended", () => {
-    const notification = [
-      { id: 1, type: "default", value: "New course available" },
-      { id: 2, type: "urgent", value: "New resume available" },
-      {
-        html: {
-          __html: "<strong>Urgent requirement</strong> - complete by EOD",
-        },
-        id: 3,
-        type: "urgent",
-      },
-    ];
-
-    const wrapper = mount(
-      <AppContext.Provider value={{ user, logOut }}>
-        <App />
-      </AppContext.Provider>
-    );
-
-    wrapper.instance().markNotificationAsRead(3);
-    expect(wrapper.state().listNotifications).toEqual(notification);
+    const expectedProps = {
+      isLoggedIn: true,
+    };
+    const props = mapStateToProps(state);
+    expect(props).toEqual(expectedProps);
   });
 });

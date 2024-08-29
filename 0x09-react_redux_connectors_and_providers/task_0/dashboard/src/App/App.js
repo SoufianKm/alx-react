@@ -13,18 +13,6 @@ import { AppContext, user } from "./AppContext";
 import { connect } from "react-redux";
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.handleKeyPress = this.handleKeyPress.bind(this);
-    this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this);
-    this.handleHideDrawer = this.handleHideDrawer.bind(this);
-    this.state = {
-      displayDrawer: false,
-      user: user,
-      listNotifications: listNotifications,
-    };
-  }
-
   listCourses = [
     { id: 1, name: "ES6", credit: 60 },
     { id: 2, name: "Webpack", credit: 20 },
@@ -36,6 +24,18 @@ class App extends Component {
     { id: 2, type: "urgent", value: "New resume available" },
     { id: 3, type: "urgent", html: getLatestNotification() },
   ];
+
+  constructor(props) {
+    super(props);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this);
+    this.handleHideDrawer = this.handleHideDrawer.bind(this);
+    this.state = {
+      displayDrawer: false,
+      user: user,
+      listNotifications: this.listNotifications,
+    };
+  }
 
   componentDidMount() {
     document.addEventListener("keydown", this.handleKeyPress);
