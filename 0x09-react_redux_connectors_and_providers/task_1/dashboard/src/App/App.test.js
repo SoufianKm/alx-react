@@ -12,7 +12,6 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 import uiReducer, { initialState } from "../reducers/uiReducer";
 import { fromJS } from "immutable";
-import { AppContext } from "./AppContext";
 
 const store = createStore(uiReducer, fromJS(initialState));
 
@@ -60,7 +59,7 @@ describe("when isLoggedIn prop is true", () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallow(
+    wrapper = mount(
       <Provider store={store}>
         <App isLoggedIn={true} />
       </Provider>
@@ -114,44 +113,15 @@ describe("App Component", () => {
   });
 });
 
-describe("Testing App Component's State", () => {
-  let wrapper;
-
-  beforeEach(() => {
-    wrapper = shallow(
-      <Provider store={store}>
-        <App />
-      </Provider>
-    );
-    StyleSheetTestUtils.suppressStyleInjection();
-  });
-
-  afterEach(() => {
-    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
-  });
-
-  it("checks if default value of displayDrawer in state is false", () => {
-    expect(wrapper.state("displayDrawer")).toBe(false);
-  });
-
-  it("Verify that after calling handleDisplayDrawer, the state displayDrawer should now be true", () => {
-    wrapper.instance().handleDisplayDrawer();
-    expect(wrapper.state("displayDrawer")).toBe(true);
-  });
-
-  it("verify that after calling handleHideDrawer, the state displayDrawer is updated to be false", () => {
-    wrapper.instance().handleHideDrawer();
-    expect(wrapper.state("displayDrawer")).toBe(false);
-  });
-});
-
 describe("mapStateToProps", () => {
-  it("should return the right object when passing the state", () => {
+  it("should return the correct props from state", () => {
     const state = fromJS({
       isUserLoggedIn: true,
+      isNotificationDrawerVisible: false,
     });
     const expectedProps = {
       isLoggedIn: true,
+      displayDrawer: false,
     };
     const props = mapStateToProps(state);
     expect(props).toEqual(expectedProps);
