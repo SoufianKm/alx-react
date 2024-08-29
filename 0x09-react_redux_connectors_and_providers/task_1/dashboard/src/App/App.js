@@ -11,6 +11,10 @@ import BodySection from "../BodySection/BodySection";
 import { StyleSheet, css } from "aphrodite";
 import { AppContext, user } from "./AppContext";
 import { connect } from "react-redux";
+import {
+  displayNotificationDrawer,
+  hideNotificationDrawer,
+} from "../actions/uiActionCreators";
 
 class App extends Component {
   listCourses = [
@@ -28,10 +32,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.handleKeyPress = this.handleKeyPress.bind(this);
-    this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this);
-    this.handleHideDrawer = this.handleHideDrawer.bind(this);
     this.state = {
-      displayDrawer: false,
       user: user,
       listNotifications: this.listNotifications,
     };
@@ -40,6 +41,7 @@ class App extends Component {
   componentDidMount() {
     document.addEventListener("keydown", this.handleKeyPress);
   }
+
   handleKeyPress = (event) => {
     if (event.ctrlKey && event.key === "h") {
       alert("Logging you out");
@@ -49,14 +51,6 @@ class App extends Component {
 
   componentWillUnmount() {
     document.removeEventListener("keydown", this.handleKeyPress);
-  }
-
-  handleDisplayDrawer() {
-    this.setState({ displayDrawer: true });
-  }
-
-  handleHideDrawer() {
-    this.setState({ displayDrawer: false });
   }
 
   logOut = () => {
@@ -71,20 +65,27 @@ class App extends Component {
   markNotificationAsRead(id) {
     const Notifications = this.state.listNotifications;
     this.setState({
-      listNotifications: Notifications.filter((notif) => id != notif.id),
+      listNotifications: Notifications.filter((notif) => id !== notif.id),
     });
   }
 
   render() {
     const currentUser = this.state.user;
     const logOut = this.logOut;
+    const {
+      displayDrawer,
+      isLoggedIn,
+      displayNotificationDrawer,
+      hideNotificationDrawer,
+    } = this.props;
+
     return (
       <AppContext.Provider value={{ currentUser, logOut }}>
         <Notifications
           listNotifications={this.listNotifications}
-          displayDrawer={this.state.displayDrawer}
-          handleDisplayDrawer={this.handleDisplayDrawer}
-          handleHideDrawer={this.handleHideDrawer}
+          displayDrawer={displayDrawer}
+          handleDisplayDrawer={displayNotificationDrawer}
+          handleHideDrawer={hideNotificationDrawer}
           markNotificationAsRead={this.markNotificationAsRead}
         />
         <div className={css(styles.app)}>
@@ -92,7 +93,7 @@ class App extends Component {
             <Header />
           </div>
           <div className={css(styles.appBody)}>
-            {currentUser.isLoggedIn ? (
+            {isLoggedIn ? (
               <BodySectionWithMarginBottom title="Course list">
                 <CourseList listCourses={this.listCourses} />
               </BodySectionWithMarginBottom>
@@ -118,6 +119,20 @@ class App extends Component {
     );
   }
 }
+
+App.propTypes = {
+  isLoggedIn: PropTypes.bool,
+  displayDrawer: PropTypes.bool,
+  displayNotificationDrawer: PropTypes.func,
+  hideNotificationDrawer: PropTypes.func,
+};
+
+App.defaultProps = {
+  isLoggedIn: false,
+  displayDrawer: false,
+  displayNotificationDrawer: () => {},
+  hideNotificationDrawer: () => {},
+};
 
 const styles = StyleSheet.create({
   app: { textAlign: "center" },
