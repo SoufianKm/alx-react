@@ -9,11 +9,12 @@ import { getLatestNotification } from "../utils/utils";
 import BodySectionWithMarginBottom from "../BodySection/BodySectionWithMarginBottom";
 import BodySection from "../BodySection/BodySection";
 import { StyleSheet, css } from "aphrodite";
-import { AppContext, user } from "./AppContext";
+import { AppContext } from "./AppContext";
 import { connect } from "react-redux";
 import {
   displayNotificationDrawer,
   hideNotificationDrawer,
+  loginRequest,
 } from "../actions/uiActionCreators";
 
 class App extends Component {
@@ -33,7 +34,6 @@ class App extends Component {
     super(props);
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.state = {
-      user: user,
       listNotifications: this.listNotifications,
     };
   }
@@ -42,24 +42,15 @@ class App extends Component {
     document.addEventListener("keydown", this.handleKeyPress);
   }
 
-  handleKeyPress = (event) => {
-    if (event.ctrlKey && event.key === "h") {
-      alert("Logging you out");
-      this.props.logOut();
-    }
-  };
-
   componentWillUnmount() {
     document.removeEventListener("keydown", this.handleKeyPress);
   }
 
-  logOut = () => {
-    this.setState({ user: user });
-  };
-
-  logIn = (email, password) => {
-    const currentUser = { email: email, password: password, isLoggedIn: true };
-    this.setState({ user: currentUser });
+  handleKeyPress = (event) => {
+    if (event.ctrlKey && event.key === "h") {
+      alert("Logging you out");
+      this.props.logOut(); // This will be provided via context or from parent component
+    }
   };
 
   markNotificationAsRead(id) {
@@ -70,17 +61,18 @@ class App extends Component {
   }
 
   render() {
-    const currentUser = this.state.user;
-    const logOut = this.logOut;
     const {
       displayDrawer,
       isLoggedIn,
       displayNotificationDrawer,
       hideNotificationDrawer,
+      login,
     } = this.props;
 
     return (
-      <AppContext.Provider value={{ currentUser, logOut }}>
+      <AppContext.Provider
+        value={{ currentUser: this.state.user, logOut: this.props.logOut }}
+      >
         <Notifications
           listNotifications={this.listNotifications}
           displayDrawer={displayDrawer}
@@ -99,7 +91,7 @@ class App extends Component {
               </BodySectionWithMarginBottom>
             ) : (
               <BodySectionWithMarginBottom title="Log in to continue">
-                <Login logIn={this.logIn} />
+                <Login logIn={login} />
               </BodySectionWithMarginBottom>
             )}
             <BodySection title="News from the school">
@@ -125,6 +117,7 @@ App.propTypes = {
   displayDrawer: PropTypes.bool,
   displayNotificationDrawer: PropTypes.func,
   hideNotificationDrawer: PropTypes.func,
+  login: PropTypes.func.isRequired,
 };
 
 App.defaultProps = {
@@ -172,6 +165,7 @@ export const mapStateToProps = (state) => {
 const mapDispatchToProps = {
   displayNotificationDrawer,
   hideNotificationDrawer,
+  login: loginRequest,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
