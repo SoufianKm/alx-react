@@ -1,10 +1,9 @@
-import { getFooterCopy, getFullYear } from "../utils/utils";
 import React from "react";
-import { AppContext } from "../App/AppContext";
+import { getFooterCopy, getFullYear } from "../utils/utils";
+import { connect } from "react-redux";
 
-function Footer() {
-  const context = React.useContext(AppContext);
-  const footerText = context.currentUser.isLoggedIn ? (
+function Footer({ user }) {
+  const footerText = user.isLoggedIn ? (
     <a href="#">Contact us</a>
   ) : (
     `Copyright ${getFullYear()} - ${getFooterCopy(false)}`
@@ -17,4 +16,12 @@ function Footer() {
   );
 }
 
-export default Footer;
+// Step 1: Create mapStateToProps
+const mapStateToProps = (state) => {
+  return {
+    user: state.get("user"), // Assuming the user object is stored in the Redux state
+  };
+};
+
+// Step 2: Connect the Footer component to Redux
+export default connect(mapStateToProps)(Footer);
