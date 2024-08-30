@@ -8,6 +8,7 @@ import CourseList from "../CourseList/CourseList";
 import Notifications from "../Notifications/Notifications";
 import { StyleSheetTestUtils } from "aphrodite";
 import { mapStateToProps } from "./App";
+import { fromJS } from "immutable";
 
 describe("<App />", () => {
   let wrapper;
@@ -63,8 +64,10 @@ describe("when isLoggedIn prop is true", () => {
 describe("mapStateToProps", () => {
   it("should return the correct props from state", () => {
     const state = fromJS({
-      isUserLoggedIn: true,
-      isNotificationDrawerVisible: false,
+      ui: {
+        isUserLoggedIn: true,
+        isNotificationDrawerVisible: false,
+      },
     });
     const expectedProps = {
       isLoggedIn: true,
