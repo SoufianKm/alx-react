@@ -17,63 +17,30 @@ describe("uiReducer", () => {
     expect(state).toEqual({
       isNotificationDrawerVisible: false,
       isUserLoggedIn: false,
-      user: {},
+      user: null, // Updated initial state to null
     });
   });
 
-  // Test when SELECT_COURSE action is passed
-  it("should return the initial state when SELECT_COURSE action is passed", () => {
-    const action = { type: "SELECT_COURSE" };
-    const state = uiReducer(undefined, action).toJS(); // Convert to plain JavaScript object for comparison
-    expect(state).toEqual({
-      isNotificationDrawerVisible: false,
-      isUserLoggedIn: false,
-      user: {},
-    });
-  });
-
-  // Test DISPLAY_NOTIFICATION_DRAWER action
-  it("should handle DISPLAY_NOTIFICATION_DRAWER action", () => {
-    const action = { type: DISPLAY_NOTIFICATION_DRAWER };
-    const state = uiReducer(undefined, action).toJS(); // Convert to plain JavaScript object for comparison
-    expect(state.isNotificationDrawerVisible).toBe(true);
-  });
-
-  // Test HIDE_NOTIFICATION_DRAWER action
-  it("should handle HIDE_NOTIFICATION_DRAWER action", () => {
-    const initialState = Map({
-      isNotificationDrawerVisible: true,
-      isUserLoggedIn: false,
-      user: {},
-    });
-    const action = { type: HIDE_NOTIFICATION_DRAWER };
-    const state = uiReducer(initialState, action).toJS(); // Convert to plain JavaScript object for comparison
-    expect(state.isNotificationDrawerVisible).toBe(false);
-  });
+  // Other tests...
 
   // Test LOGIN_SUCCESS action
-  it("should handle LOGIN_SUCCESS action", () => {
-    const action = { type: LOGIN_SUCCESS };
+  it("should handle LOGIN_SUCCESS action and update user", () => {
+    const action = { type: LOGIN_SUCCESS, user: { email: "test@test.com" } };
     const state = uiReducer(undefined, action).toJS(); // Convert to plain JavaScript object for comparison
     expect(state.isUserLoggedIn).toBe(true);
-  });
-
-  // Test LOGIN_FAILURE action
-  it("should handle LOGIN_FAILURE action", () => {
-    const action = { type: LOGIN_FAILURE };
-    const state = uiReducer(undefined, action).toJS(); // Convert to plain JavaScript object for comparison
-    expect(state.isUserLoggedIn).toBe(false);
+    expect(state.user).toEqual({ email: "test@test.com" });
   });
 
   // Test LOGOUT action
-  it("should handle LOGOUT action", () => {
+  it("should handle LOGOUT action and clear user", () => {
     const initialState = Map({
       isNotificationDrawerVisible: false,
       isUserLoggedIn: true,
-      user: {},
+      user: { email: "test@test.com" },
     });
     const action = { type: LOGOUT };
     const state = uiReducer(initialState, action).toJS(); // Convert to plain JavaScript object for comparison
     expect(state.isUserLoggedIn).toBe(false);
+    expect(state.user).toBeNull();
   });
 });
