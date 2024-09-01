@@ -9,8 +9,9 @@ import {
   fetchNotifications,
   setLoadingState,
   markAsRead,
+  setNotificationFilter, // Import the new action
 } from "../../actions/notificationActionCreators";
-import { getUnreadNotifications } from "../../selectors/notificationSelectors";
+import { getUnreadNotificationsByType } from "../../selectors/notificationSelector"; // Update the selector import
 
 class Notifications extends PureComponent {
   constructor(props) {
@@ -26,6 +27,10 @@ class Notifications extends PureComponent {
   markNotificationAsRead(id) {
     this.props.markAsRead(id);
     console.log(`Notification ${id} has been marked as read`);
+  }
+
+  handleFilterChange(filter) {
+    this.props.setNotificationFilter(filter); // Update the filter based on button click
   }
 
   render() {
@@ -53,6 +58,14 @@ class Notifications extends PureComponent {
               this.props.listNotifications.length > 0 ? (
                 <>
                   <p>Here is the list of notifications</p>
+                  <div>
+                    <button onClick={() => this.handleFilterChange("urgent")}>
+                      ‼️
+                    </button>
+                    <button onClick={() => this.handleFilterChange("default")}>
+                      💠
+                    </button>
+                  </div>
                   <ul className={css(styles.ul)}>
                     {this.props.listNotifications.map(
                       ({ id, html, type, value }) => (
@@ -162,6 +175,7 @@ Notifications.propTypes = {
   markAsRead: PropTypes.func, // Added markAsRead to prop types
   handleDisplayDrawer: PropTypes.func,
   handleHideDrawer: PropTypes.func,
+  setNotificationFilter: PropTypes.func, // Add setNotificationFilter to prop types
 };
 
 Notifications.defaultProps = {
@@ -172,11 +186,12 @@ Notifications.defaultProps = {
   markAsRead: () => {}, // Default to empty function
   handleDisplayDrawer: () => {},
   handleHideDrawer: () => {},
+  setNotificationFilter: () => {}, // Default to empty function
 };
 
 const mapStateToProps = (state) => {
   return {
-    listNotifications: getUnreadNotifications(state), // Using the selector here
+    listNotifications: getUnreadNotificationsByType(state), // Update to use the new selector
   };
 };
 
@@ -184,6 +199,7 @@ export const mapDispatchToProps = {
   fetchNotifications,
   setLoadingState,
   markAsRead, // Add markAsRead here
+  setNotificationFilter, // Add setNotificationFilter here
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Notifications);
