@@ -65,4 +65,18 @@ describe("notification selectors", () => {
       ])
     );
   });
+
+  it("getUnreadNotificationsByType returns only unread default notifications when filter is set to 'default'", () => {
+    state = state.set("filter", "default"); // Update the filter to 'default'
+    expect(getUnreadNotificationsByType(state)).toEqual(
+      fromJS([
+        {
+          id: 1,
+          type: "default",
+          value: "New course available",
+          isRead: false,
+        },
+      ])
+    );
+  });
 });

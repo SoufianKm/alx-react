@@ -4,6 +4,7 @@ import { shallow } from "enzyme";
 import {
   fetchNotifications,
   markAsRead,
+  setNotificationFilter, // Import the setNotificationFilter action
 } from "../../actions/notificationActionCreators";
 
 jest.mock("../../actions/notificationActionCreators");
@@ -15,6 +16,7 @@ describe("Notifications", () => {
   beforeEach(() => {
     fetchNotifications.mockImplementation(() => jest.fn());
     markAsRead.mockImplementation(() => jest.fn());
+    setNotificationFilter.mockImplementation(() => jest.fn()); // Mock the new action
 
     props = {
       displayDrawer: true,
@@ -22,10 +24,11 @@ describe("Notifications", () => {
         { id: 1, type: "default", value: "New course available" },
       ],
       fetchNotifications,
-      markAsRead, // Include the mock action here
+      markAsRead,
       setLoadingState: jest.fn(),
       handleDisplayDrawer: jest.fn(),
       handleHideDrawer: jest.fn(),
+      setNotificationFilter, // Include the mocked action here
     };
 
     wrapper = shallow(<Notifications {...props} />);
@@ -54,5 +57,15 @@ describe("Notifications", () => {
   it("markAsRead is called when markNotificationAsRead is triggered", () => {
     wrapper.instance().markNotificationAsRead(1);
     expect(props.markAsRead).toHaveBeenCalledWith(1);
+  });
+
+  it("clicking the first button calls setNotificationFilter with 'urgent'", () => {
+    wrapper.find("button").at(0).simulate("click"); // Click the first filter button
+    expect(props.setNotificationFilter).toHaveBeenCalledWith("urgent");
+  });
+
+  it("clicking the second button calls setNotificationFilter with 'default'", () => {
+    wrapper.find("button").at(1).simulate("click"); // Click the second filter button
+    expect(props.setNotificationFilter).toHaveBeenCalledWith("default");
   });
 });
