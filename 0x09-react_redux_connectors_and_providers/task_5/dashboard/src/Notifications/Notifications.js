@@ -5,7 +5,10 @@ import PropTypes from "prop-types";
 import NotificationItemShape from "./NotificationItemShape";
 import { StyleSheet, css } from "aphrodite";
 import { connect } from "react-redux";
-import { fetchNotifications } from "../../actions/notificationActionCreators";
+import {
+  fetchNotifications,
+  setLoadingState,
+} from "../../actions/notificationActionCreators";
 
 class Notifications extends PureComponent {
   constructor(props) {
@@ -14,6 +17,7 @@ class Notifications extends PureComponent {
   }
 
   componentDidMount() {
+    this.props.setLoadingState(true);
     this.props.fetchNotifications();
   }
 
@@ -67,13 +71,11 @@ class Notifications extends PureComponent {
             </div>
           </div>
         ) : (
-          <div className={css(styles.flexArea)}>
-            <div
-              className={css(styles.menuItem)}
-              onClick={this.props.handleDisplayDrawer}
-            >
-              <p>Your notifications</p>
-            </div>
+          <div
+            className={css(styles.menuItem)}
+            onClick={this.props.handleDisplayDrawer}
+          >
+            <p>Your notifications</p>
           </div>
         )}
       </React.Fragment>
@@ -81,27 +83,101 @@ class Notifications extends PureComponent {
   }
 }
 
+const styles = StyleSheet.create({
+  Notifications: {
+    border: "2px dashed red",
+    padding: "1rem",
+    width: "100%",
+    position: "absolute",
+    right: 0,
+    marginRight: "1rem",
+    background: "white",
+    zIndex: 10,
+  },
+  menuItem: {
+    textAlign: "end",
+    marginRight: "1rem",
+  },
+  ul: {
+    margin: 0,
+  },
+  button: {
+    border: "none",
+    background: "transparent",
+    position: "absolute",
+    right: "1rem",
+    top: "1rem",
+  },
+  img: {
+    width: "15px",
+    height: "15px",
+  },
+  flexArea: {
+    marginBottom: "1rem",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-end",
+    "@media (max-width: 900px)": {
+      width: "100%",
+    },
+  },
+  showOn: {
+    animationName: [
+      {
+        "0%": {
+          transform: "translateY(0px)",
+        },
+        "100%": {
+          transform: "translateY(-100px)",
+        },
+      },
+    ],
+    animationDuration: "1s, 0.5s",
+    animationIterationCount: "infinite",
+  },
+  showOff: {
+    animationName: [
+      {
+        "0%": {
+          transform: "translateY(-100px)",
+        },
+        "100%": {
+          transform: "translateY(0px)",
+        },
+      },
+    ],
+    animationDuration: "1s, 0.5s",
+    animationIterationCount: "infinite",
+  },
+});
+
 Notifications.propTypes = {
   displayDrawer: PropTypes.bool,
   listNotifications: PropTypes.arrayOf(NotificationItemShape),
-  handleHideDrawer: PropTypes.func,
+  fetchNotifications: PropTypes.func,
+  setLoadingState: PropTypes.func,
   handleDisplayDrawer: PropTypes.func,
-  fetchNotifications: PropTypes.func.isRequired, // Added this line
+  handleHideDrawer: PropTypes.func,
 };
 
 Notifications.defaultProps = {
   displayDrawer: false,
   listNotifications: [],
-  handleHideDrawer: PropTypes.func,
-  handleDisplayDrawer: PropTypes.func,
+  fetchNotifications: () => {},
+  setLoadingState: () => {},
+  handleDisplayDrawer: () => {},
+  handleHideDrawer: () => {},
 };
 
-const mapStateToProps = (state) => ({
-  listNotifications: state.notifications.get("messages").toJS(), // Updated this line
-});
+const mapStateToProps = (state) => {
+  return {
+    listNotifications: state.notifications,
+  };
+};
 
-const mapDispatchToProps = {
+export const mapDispatchToProps = {
   fetchNotifications,
+  setLoadingState,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Notifications);

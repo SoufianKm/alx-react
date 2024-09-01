@@ -1,9 +1,9 @@
-// notificationReducer.test.js
 import notificationReducer from "./notificationReducer";
 import {
   FETCH_NOTIFICATIONS_SUCCESS,
   MARK_AS_READ,
   SET_TYPE_FILTER,
+  SET_LOADING_STATE,
 } from "../actions/notificationActionTypes";
 import { fromJS } from "immutable";
 
@@ -11,6 +11,7 @@ describe("notificationReducer", () => {
   const initialState = fromJS({
     notifications: [],
     filter: "DEFAULT",
+    loading: false, // New default state
   });
 
   it("should return the default state", () => {
@@ -45,6 +46,7 @@ describe("notificationReducer", () => {
         { id: 2, type: "urgent", value: "New resume available", isRead: false },
         { id: 3, type: "urgent", value: "New data available", isRead: false },
       ],
+      loading: false, // Ensure loading is set to false after fetch
     });
 
     const state = notificationReducer(undefined, action);
@@ -64,10 +66,11 @@ describe("notificationReducer", () => {
         { id: 2, type: "urgent", value: "New resume available", isRead: false },
         { id: 3, type: "urgent", value: "New data available", isRead: false },
       ],
+      loading: false,
     });
     const action = {
       type: MARK_AS_READ,
-      index: 1, // Adjusted to use the correct index (0-based)
+      index: 1, // Corrected to use the proper index
     };
     const expectedState = fromJS({
       filter: "DEFAULT",
@@ -78,9 +81,10 @@ describe("notificationReducer", () => {
           value: "New course available",
           isRead: false,
         },
-        { id: 2, type: "urgent", value: "New resume available", isRead: true },
+        { id: 2, type: "urgent", value: "New resume available", isRead: true }, // Marked as read
         { id: 3, type: "urgent", value: "New data available", isRead: false },
       ],
+      loading: false,
     });
     const state = notificationReducer(initialState, action);
     expect(state).toEqual(expectedState);
@@ -103,6 +107,7 @@ describe("notificationReducer", () => {
         { id: 2, type: "urgent", value: "New resume available", isRead: false },
         { id: 3, type: "urgent", value: "New data available", isRead: false },
       ],
+      loading: false,
     });
     const expectedState = fromJS({
       filter: "URGENT",
@@ -116,7 +121,18 @@ describe("notificationReducer", () => {
         { id: 2, type: "urgent", value: "New resume available", isRead: false },
         { id: 3, type: "urgent", value: "New data available", isRead: false },
       ],
+      loading: false,
     });
+    const state = notificationReducer(initialState, action);
+    expect(state).toEqual(expectedState);
+  });
+
+  it("should handle SET_LOADING_STATE and return the correct state", () => {
+    const action = {
+      type: SET_LOADING_STATE,
+      loading: true,
+    };
+    const expectedState = initialState.set("loading", true);
     const state = notificationReducer(initialState, action);
     expect(state).toEqual(expectedState);
   });
