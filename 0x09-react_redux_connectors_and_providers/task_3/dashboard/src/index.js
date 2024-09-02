@@ -11,8 +11,10 @@ import { Map } from "immutable";
 // Create the Redux store with thunk middleware and Redux DevTools support
 const store = createStore(
   uiReducer,
-  Map(initialState),
-  composeWithDevTools(applyMiddleware(thunk))
+  Map(initialState), // Ensure initialState is compatible with Map
+  composeWithDevTools(
+    applyMiddleware(thunk) // Apply middleware and DevTools
+  )
 );
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
